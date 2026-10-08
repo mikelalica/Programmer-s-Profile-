@@ -1,1 +1,125 @@
+/* =========================
+   MOBILE MENU
+========================= */
 
+const menuBtn = document.getElementById("menuBtn");
+const navMenu = document.getElementById("navMenu");
+
+menuBtn.addEventListener("click", () => {
+    navMenu.classList.toggle("open");
+
+    if (navMenu.classList.contains("open")) {
+        menuBtn.textContent = "✕";
+    } else {
+        menuBtn.textContent = "☰";
+    }
+});
+
+
+/* =========================
+   CLOSE MENU AFTER CLICK
+========================= */
+
+document.querySelectorAll(".nav-link").forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        navMenu.classList.remove("open");
+
+        menuBtn.textContent = "☰";
+
+    });
+
+});
+
+
+/* =========================
+   ACTIVE NAVIGATION
+========================= */
+
+const sections = document.querySelectorAll("section");
+const navLinks = document.querySelectorAll(".nav-link");
+
+window.addEventListener("scroll", () => {
+
+    let current = "";
+
+    sections.forEach(section => {
+
+        const sectionTop = section.offsetTop - 150;
+
+        if (window.scrollY >= sectionTop) {
+            current = section.getAttribute("id");
+        }
+
+    });
+
+    navLinks.forEach(link => {
+
+        link.classList.remove("active");
+
+        if (link.getAttribute("href") === `#${current}`) {
+            link.classList.add("active");
+        }
+
+    });
+
+});
+
+
+/* =========================
+   SCROLL REVEAL
+========================= */
+
+const revealElements = document.querySelectorAll(
+    ".skill-card, .project-card, .education-card, .about-text"
+);
+
+const observer = new IntersectionObserver(
+
+    entries => {
+
+        entries.forEach(entry => {
+
+            if (entry.isIntersecting) {
+
+                entry.target.classList.add("show");
+
+                observer.unobserve(entry.target);
+
+            }
+
+        });
+
+    },
+
+    {
+        threshold: 0.15
+    }
+
+);
+
+
+revealElements.forEach(element => {
+    observer.observe(element);
+});
+
+
+/* =========================
+   TERMINAL TYPING EFFECT
+========================= */
+
+const terminalCursor = document.querySelector(".terminal-body p:last-child");
+
+let cursorVisible = true;
+
+setInterval(() => {
+
+    if (!terminalCursor) return;
+
+    cursorVisible = !cursorVisible;
+
+    terminalCursor.style.opacity =
+        cursorVisible ? "1" : "0.3";
+
+}, 500);
