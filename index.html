@@ -1,16 +1,233 @@
-<div class="profile-wrapper">
-    <div class="profile-glow"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mike Lalica | Network Development Management, NVSU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF1F6;--ink:#101B33;--mute:#53607A;--line:#C5CEDC;--sig:#1D4FFF;--pkt:#FF8A00;--panel:#F8FAFC;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1526;--ink:#E8EEF9;--mute:#93A1BD;--line:#26324D;--sig:#6C93FF;--pkt:#FFB347;--panel:#141D33}}
+:root[data-theme="dark"]{--bg:#0E1526;--ink:#E8EEF9;--mute:#93A1BD;--line:#26324D;--sig:#6C93FF;--pkt:#FFB347;--panel:#141D33}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sig);outline-offset:3px;border-radius:4px}
 
-    <div class="profile-frame">
-        <img 
-            src="./IMG_20261008_121450.jpg" 
-            alt="Mike Lalica Profile Picture"
-            class="profile-picture"
-        >
-    </div>
+/* Cable rail: scroll progress and navigation */
+#rail{position:fixed;left:max(14px,env(safe-area-inset-left,0px));top:16vh;bottom:16vh;width:28px;z-index:5}
+#rail .track{position:absolute;left:13px;top:0;bottom:0;width:2px;background:var(--line)}
+#rail .fill{position:absolute;left:13px;top:0;width:2px;height:calc(var(--p,0)*100%);background:var(--sig)}
+#rail .pkt{position:absolute;left:8px;top:calc(var(--p,0)*100%);width:12px;height:12px;margin-top:-6px;border-radius:50%;background:var(--pkt);box-shadow:0 0 0 5px color-mix(in srgb,var(--pkt) 25%,transparent)}
+#rail button{position:absolute;left:6px;width:16px;height:16px;margin-top:-8px;padding:0;border-radius:50%;border:2px solid var(--line);background:var(--bg);cursor:pointer;transition:border-color .2s,background .2s}
+#rail button.on{border-color:var(--sig);background:var(--sig)}
+#rail button span{position:absolute;left:28px;top:50%;transform:translateY(-50%);font:500 13px var(--body);color:var(--mute);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s}
+#rail button:hover span,#rail button:focus-visible span,#rail button.on span{opacity:1}
+#rail button.on span{color:var(--ink)}
 
-    <div class="profile-label">
-        <span></span>
-        MIKE LALICA
+.wrap{max-width:900px;margin-left:clamp(56px,11vw,180px);padding-right:24px}
+section{padding-block:clamp(72px,13vh,150px)}
+h2{font:800 clamp(30px,4.6vw,50px)/1.05 var(--display);letter-spacing:-.025em;margin:0 0 28px}
+p{margin:0 0 1em;max-width:62ch}
+.mute{color:var(--mute)}
+
+/* Hero */
+#top{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden;padding-block:80px}
+#net-wrap{position:absolute;inset:0;will-change:transform,opacity}
+#net{width:100%;height:100%;display:block}
+#top .wrap{position:relative;z-index:1}
+.hello{font:500 18px var(--body);color:var(--mute);margin:0 0 12px}
+h1{font:800 clamp(52px,12vw,140px)/.9 var(--display);letter-spacing:-.04em;margin:0 0 28px}
+h1 span{display:block}
+.lede{font-size:clamp(18px,2.2vw,22px);color:var(--ink);max-width:36ch}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
+.btn{display:inline-block;padding:13px 22px;border-radius:10px;font:500 16px var(--body);text-decoration:none;border:2px solid var(--ink);transition:background .2s,color .2s,border-color .2s}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn:hover{background:var(--sig);border-color:var(--sig);color:#fff}
+.in{opacity:0;transform:translateY(18px);animation:in .8s cubic-bezier(.2,.7,.2,1) forwards}
+.in:nth-child(2){animation-delay:.12s}.in:nth-child(3){animation-delay:.24s}.in:nth-child(4){animation-delay:.4s}
+@keyframes in{to{opacity:1;transform:none}}
+
+/* Rows */
+dl{margin:0}
+.row{display:grid;grid-template-columns:minmax(120px,200px) 1fr;gap:8px 24px;padding:20px 0;border-top:1px solid var(--line)}
+.row:last-child{border-bottom:1px solid var(--line)}
+dt{color:var(--mute);font-weight:500}
+dd{margin:0;font-size:19px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--panel);font-weight:500;font-size:16px;transition:border-color .2s,transform .2s}
+.chip:hover{border-color:var(--sig);transform:translateY(-2px)}
+
+/* Focus */
+.focus{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.focus div{padding:4px 24px 4px 20px;border-left:2px solid var(--line);transition:border-color .25s}
+.focus div:hover{border-left-color:var(--pkt)}
+.focus h3{font:800 24px/1.15 var(--display);letter-spacing:-.015em;margin:0 0 10px}
+.focus p{font-size:16px;color:var(--mute)}
+
+/* Contact */
+#contact h2{font-size:clamp(36px,7vw,84px)}
+footer{padding:32px 24px 56px;margin-left:clamp(56px,11vw,180px);color:var(--mute);font-size:15px}
+
+@media (max-width:720px){
+  #rail{left:10px;top:20vh;bottom:12vh}
+  #rail button span{display:none}
+  .wrap{margin-left:52px;padding-right:18px}
+  footer{margin-left:52px}
+  .row{grid-template-columns:1fr;gap:2px}
+  .focus{grid-template-columns:1fr;gap:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .in{animation:none;opacity:1;transform:none}
+  .chip:hover{transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav id="rail" aria-label="Page sections"><div class="track"></div><div class="fill"></div><div class="pkt"></div></nav>
+
+<main>
+<section id="top" data-label="Start">
+  <div id="net-wrap" aria-hidden="true"><canvas id="net"></canvas></div>
+  <div class="wrap">
+    <p class="hello in">Yokoso!</p>
+    <h1 class="in"><span>Mike</span><span>Lalica</span></h1>
+    <p class="lede in">3rd-year BSIT student specializing in Network Development Management at Nueva Vizcaya State University.</p>
+    <div class="cta in">
+      <a class="btn solid" href="#stack">See my stack</a>
+      <a class="btn" href="#contact">Get in touch</a>
     </div>
-</div>
+  </div>
+</section>
+
+<section id="academics" data-label="Academics">
+  <div class="wrap">
+    <h2>Academic background</h2>
+    <dl>
+      <div class="row"><dt>University</dt><dd>Nueva Vizcaya State University (NVSU)</dd></div>
+      <div class="row"><dt>Course</dt><dd>Bachelor of Science in Information Technology (BSIT)</dd></div>
+      <div class="row"><dt>Specialization</dt><dd>Network Development Management (NDM)</dd></div>
+      <div class="row"><dt>Year level</dt><dd>3rd year</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="focus" data-label="Focus">
+  <div class="wrap">
+    <h2>What I'm learning now</h2>
+    <div class="focus">
+      <div><h3>Network infrastructures</h3><p>How networks are designed, addressed, connected and scaled.</p></div>
+      <div><h3>Network security</h3><p>Protecting traffic, devices and access across a network.</p></div>
+      <div><h3>Systems administration</h3><p>Setting up, maintaining and troubleshooting the systems networks run on.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="stack" data-label="Stack">
+  <div class="wrap">
+    <h2>Tech stack and tools</h2>
+    <dl>
+      <div class="row"><dt>Languages and frontend</dt><dd><div class="chips"><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">JavaScript</span></div></dd></div>
+      <div class="row"><dt>Networking and systems</dt><dd><div class="chips"><span class="chip">Cisco Packet Tracer</span></div></dd></div>
+      <div class="row"><dt>Tools and editors</dt><dd><div class="chips"><span class="chip">VS Code</span><span class="chip">Git</span><span class="chip">GitHub</span></div></dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="contact" data-label="Contact">
+  <div class="wrap">
+    <h2>Let's build something together.</h2>
+    <p class="mute">Explore my repositories on GitHub or reach out to collaborate.</p>
+    <div class="cta">
+      <!-- Replace USERNAME with your GitHub username -->
+      <a class="btn solid" href="https://github.com/USERNAME" target="_blank" rel="noopener">View repositories</a>
+    </div>
+  </div>
+</section>
+</main>
+<footer>Mike Lalica, BSIT-NDM, NVSU</footer>
+
+<script>
+(function(){
+  var doc=document.documentElement,rail=document.getElementById('rail');
+  var secs=[].slice.call(document.querySelectorAll('main section'));
+  var btns=secs.map(function(s,i){
+    var b=document.createElement('button');
+    b.type='button';b.setAttribute('aria-label','Go to '+s.dataset.label);
+    b.style.top=(i/(secs.length-1)*100)+'%';
+    b.innerHTML='<span>'+s.dataset.label+'</span>';
+    b.onclick=function(){s.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})};
+    rail.appendChild(b);return b;
+  });
+  var wrap=document.getElementById('net-wrap'),ticking=false;
+  function onScroll(){
+    var max=doc.scrollHeight-innerHeight,p=max>0?Math.min(1,Math.max(0,scrollY/max)):0;
+    rail.style.setProperty('--p',p);
+    var act=0;secs.forEach(function(s,i){if(s.getBoundingClientRect().top<innerHeight*.5)act=i});
+    btns.forEach(function(b,i){b.classList.toggle('on',i<=act)});
+    var h=innerHeight;
+    wrap.style.transform='translateY('+(scrollY*.3)+'px)';
+    wrap.style.opacity=Math.max(0,1-scrollY/(h*.9));
+    ticking=false;
+  }
+  addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});
+  addEventListener('resize',onScroll);onScroll();
+
+  /* Network topology hero */
+  var c=document.getElementById('net'),x=c.getContext('2d'),W,H,N=[],K=[],mouse=null;
+  var rm=matchMedia('(prefers-reduced-motion: reduce)').matches,D=170;
+  function v(n){return getComputedStyle(doc).getPropertyValue(n).trim()}
+  var sig,pkt,line;
+  function colors(){sig=v('--sig');pkt=v('--pkt');line=v('--sig')}
+  function size(){
+    var r=c.parentElement.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);
+    W=r.width;H=r.height;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);
+    var n=Math.round(Math.min(46,W*H/20000));N=[];K=[];
+    for(var i=0;i<n;i++)N.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:2+Math.random()*2.5});
+    colors();draw();
+  }
+  function near(a){var o=[];N.forEach(function(b){if(b!==a){var dx=a.x-b.x,dy=a.y-b.y;if(dx*dx+dy*dy<D*D)o.push(b)}});return o}
+  function draw(){
+    x.clearRect(0,0,W,H);x.lineWidth=1;
+    for(var i=0;i<N.length;i++)for(var j=i+1;j<N.length;j++){
+      var a=N[i],b=N[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<D){x.globalAlpha=(1-d/D)*.35;x.strokeStyle=line;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}
+    }
+    if(mouse){N.forEach(function(n){var dx=n.x-mouse.x,dy=n.y-mouse.y,d=Math.sqrt(dx*dx+dy*dy);
+      if(d<D*1.2){x.globalAlpha=(1-d/(D*1.2))*.7;x.strokeStyle=pkt;x.beginPath();x.moveTo(n.x,n.y);x.lineTo(mouse.x,mouse.y);x.stroke()}});
+      x.globalAlpha=1;x.fillStyle=pkt;x.beginPath();x.arc(mouse.x,mouse.y,5,0,6.283);x.fill()}
+    x.globalAlpha=.9;x.fillStyle=sig;
+    N.forEach(function(n){x.beginPath();x.arc(n.x,n.y,n.r,0,6.283);x.fill()});
+    K.forEach(function(k){var px=k.a.x+(k.b.x-k.a.x)*k.t,py=k.a.y+(k.b.y-k.a.y)*k.t;
+      x.globalAlpha=1;x.fillStyle=pkt;x.beginPath();x.arc(px,py,3.5,0,6.283);x.fill()});
+    x.globalAlpha=1;
+  }
+  function step(){
+    if(scrollY<innerHeight*1.1){
+      N.forEach(function(n){n.x+=n.vx;n.y+=n.vy;if(n.x<0||n.x>W)n.vx*=-1;if(n.y<0||n.y>H)n.vy*=-1});
+      if(K.length<8&&Math.random()<.05){var a=N[Math.floor(Math.random()*N.length)];if(a){var o=near(a);if(o.length)K.push({a:a,b:o[Math.floor(Math.random()*o.length)],t:0})}}
+      K.forEach(function(k){k.t+=.018});K=K.filter(function(k){return k.t<1});
+      draw();
+    }
+    requestAnimationFrame(step);
+  }
+  var hero=document.getElementById('top');
+  hero.addEventListener('pointermove',function(e){var r=c.getBoundingClientRect();mouse={x:e.clientX-r.left,y:e.clientY-r.top}});
+  hero.addEventListener('pointerleave',function(){mouse=null});
+  addEventListener('resize',size);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',colors);
+  size();if(!rm)requestAnimationFrame(step);
+})();
+</script>
+</body>
+        </html>
